@@ -45,6 +45,7 @@ $envVars = [
     'DB_DATABASE' => 'buku_tamu',
     'DB_USERNAME' => '7i7y5jnB4C5ez9W.root',
     'DB_PASSWORD' => 'ZvaAF9CCIiE6cpQr',
+    'MYSQL_ATTR_SSL_CA' => __DIR__.'/../isrgrootx1.pem',
     'APP_SERVICES_CACHE' => '/tmp/storage/bootstrap/cache/services.php',
     'APP_PACKAGES_CACHE' => '/tmp/storage/bootstrap/cache/packages.php',
     'APP_CONFIG_CACHE' => '/tmp/storage/bootstrap/cache/config.php',
