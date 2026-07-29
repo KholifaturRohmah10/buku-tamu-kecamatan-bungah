@@ -59,9 +59,10 @@ return [
             'prefix_indexes' => true,
             'strict' => true,
             'engine' => null,
-            'options' => extension_loaded('pdo_mysql') ? array_filter([
-                1009 => env('MYSQL_ATTR_SSL_CA'), // PDO::MYSQL_ATTR_SSL_CA
-            ]) : [],
+            'options' => [
+                1009 => __DIR__.'/../isrgrootx1.pem',
+                1014 => false,
+            ],
         ],
 
         'mariadb' => [
