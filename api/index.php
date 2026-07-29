@@ -27,6 +27,12 @@ foreach ($dirs as $dir) {
     }
 }
 
+// Create bootstrap cache directory
+$bootstrapCachePath = '/tmp/storage/bootstrap/cache';
+if (!is_dir($bootstrapCachePath)) {
+    mkdir($bootstrapCachePath, 0755, true);
+}
+
 // Inject crucial environment variables manually to ensure foolproof Vercel execution
 $envVars = [
     'APP_ENV' => 'production',
@@ -40,6 +46,11 @@ $envVars = [
     'DB_USERNAME' => '7i7y5jnB4C5ez9W.root',
     'DB_PASSWORD' => 'ZvaAF9CCIiE6cpQr',
     'MYSQL_ATTR_SSL_CA' => __DIR__.'/../cacert.pem',
+    'APP_SERVICES_CACHE' => '/tmp/storage/bootstrap/cache/services.php',
+    'APP_PACKAGES_CACHE' => '/tmp/storage/bootstrap/cache/packages.php',
+    'APP_CONFIG_CACHE' => '/tmp/storage/bootstrap/cache/config.php',
+    'APP_ROUTES_CACHE' => '/tmp/storage/bootstrap/cache/routes.php',
+    'APP_EVENTS_CACHE' => '/tmp/storage/bootstrap/cache/events.php',
 ];
 
 foreach ($envVars as $key => $value) {
