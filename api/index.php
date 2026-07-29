@@ -1,8 +1,5 @@
 <?php
 
-echo "HELLO FROM VERCEL! JIKA TULISAN INI MUNCUL, BERARTI VERCEL BERHASIL MEMBACA KODE BARU!";
-exit;
-
 ini_set('display_errors', '1');
 error_reporting(E_ALL);
 
