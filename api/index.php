@@ -16,6 +16,10 @@ if (!is_dir($storagePath)) {
     mkdir($storagePath.'/logs', 0755, true);
 }
 
+// Force debugging and stderr logging on Vercel
+$_ENV['APP_DEBUG'] = 'true';
+$_ENV['LOG_CHANNEL'] = 'stderr';
+
 // Maintenance mode check
 if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php')) {
     require $maintenance;
