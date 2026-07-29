@@ -1,0 +1,97 @@
+@import url('https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700,800');
+@import url('https://fonts.bunny.net/css?family=fraunces:600,700');
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-display: 'Fraunces', ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
+    --color-brand-50: #f8f7f1;
+    --color-brand-100: #ece7d7;
+    --color-brand-200: #ded4ba;
+    --color-brand-300: #d4c6a3;
+    --color-brand-500: #9c7f42;
+    --color-brand-700: #5c4721;
+    --color-brand-800: #463515;
+    --color-forest-50: #eef6f3;
+    --color-forest-100: #ddece7;
+    --color-forest-200: #c6ddd5;
+    --color-forest-300: #9fc2b6;
+    --color-forest-700: #1f3b36;
+    --color-forest-800: #18322d;
+    --color-forest-900: #132723;
+}
+
+@layer base {
+    body {
+        @apply bg-stone-100 text-slate-900 antialiased;
+    }
+}
+
+@layer utilities {
+    .font-display {
+        font-family: var(--font-display);
+    }
+
+    .landing-grid {
+        background-image:
+            linear-gradient(rgba(255, 255, 255, 0.22) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.22) 1px, transparent 1px);
+        background-size: 40px 40px;
+    }
+
+    .landing-fade-up {
+        animation: landing-fade-up 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    .landing-fade-up-delay {
+        animation: landing-fade-up 0.95s cubic-bezier(0.22, 1, 0.36, 1) 0.14s both;
+    }
+
+    .landing-fade-up-delay-2 {
+        animation: landing-fade-up 1.05s cubic-bezier(0.22, 1, 0.36, 1) 0.28s both;
+    }
+
+    .survey-grid {
+        background-image:
+            linear-gradient(rgba(255, 255, 255, 0.24) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.24) 1px, transparent 1px);
+        background-size: 34px 34px;
+    }
+
+    .survey-float-slow {
+        animation: survey-float 8s ease-in-out infinite;
+    }
+
+    .survey-float-delay {
+        animation: survey-float 10s ease-in-out -2s infinite;
+    }
+}
+
+@keyframes survey-float {
+    0%,
+    100% {
+        transform: translate3d(0, 0, 0);
+    }
+
+    50% {
+        transform: translate3d(0, -16px, 0);
+    }
+}
+
+@keyframes landing-fade-up {
+    0% {
+        opacity: 0;
+        transform: translate3d(0, 24px, 0);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
