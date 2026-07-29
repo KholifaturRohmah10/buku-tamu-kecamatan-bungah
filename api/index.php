@@ -1,19 +1,30 @@
 <?php
 
+ini_set('display_errors', '1');
+error_reporting(E_ALL);
+
 use Illuminate\Http\Request;
 
 define('LARAVEL_START', microtime(true));
 
 // Ensure Vercel Serverless environment has a writable storage path
 $storagePath = '/tmp/storage';
-if (!is_dir($storagePath)) {
-    mkdir($storagePath, 0755, true);
-    mkdir($storagePath.'/app/public', 0755, true);
-    mkdir($storagePath.'/framework/cache/data', 0755, true);
-    mkdir($storagePath.'/framework/sessions', 0755, true);
-    mkdir($storagePath.'/framework/testing', 0755, true);
-    mkdir($storagePath.'/framework/views', 0755, true);
-    mkdir($storagePath.'/logs', 0755, true);
+$dirs = [
+    '',
+    '/app',
+    '/app/public',
+    '/framework',
+    '/framework/cache',
+    '/framework/cache/data',
+    '/framework/sessions',
+    '/framework/testing',
+    '/framework/views',
+    '/logs'
+];
+foreach ($dirs as $dir) {
+    if (!is_dir($storagePath . $dir)) {
+        mkdir($storagePath . $dir, 0755, true);
+    }
 }
 
 // Force debugging and stderr logging on Vercel
