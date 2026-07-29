@@ -1,7 +1,49 @@
 <?php
-
-ini_set('display_errors', '1');
+ini_set('display_errors', 1);
 error_reporting(E_ALL);
+
+$host = 'gateway01.ap-southeast-1.prod.alicloud.tidbcloud.com';
+$port = 4000;
+$db   = 'buku_tamu';
+$user = '7i7y5jnB4C5ez9W.root';
+$pass = 'ZvaAF9CCIiE6cpQr';
+
+$dsn = "mysql:host=$host;port=$port;dbname=$db;charset=utf8mb4";
+
+$tests = [
+    'No SSL options' => [],
+    'With cacert.pem' => [
+        PDO::MYSQL_ATTR_SSL_CA => __DIR__.'/../cacert.pem',
+    ],
+    'With isrgrootx1.pem' => [
+        PDO::MYSQL_ATTR_SSL_CA => __DIR__.'/../isrgrootx1.pem',
+    ],
+    'With AL9 system CA' => [
+        PDO::MYSQL_ATTR_SSL_CA => '/etc/pki/tls/certs/ca-bundle.crt',
+    ],
+    'With Verify false' => [
+        1014 => false, // PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT
+    ],
+    'With isrgrootx1.pem + Verify false' => [
+        PDO::MYSQL_ATTR_SSL_CA => __DIR__.'/../isrgrootx1.pem',
+        1014 => false,
+    ]
+];
+
+echo "<h1>TiDB Connection Test</h1><pre>";
+
+foreach ($tests as $name => $options) {
+    echo "Testing: $name\n";
+    try {
+        $pdo = new PDO($dsn, $user, $pass, $options);
+        echo "SUCCESS!\n";
+        echo "SSL cipher: " . $pdo->query("SHOW STATUS LIKE 'Ssl_cipher'")->fetchColumn(1) . "\n\n";
+    } catch (\PDOException $e) {
+        echo "FAILED: " . $e->getMessage() . "\n\n";
+    }
+}
+echo "</pre>";
+exit;
 
 use Illuminate\Http\Request;
 
