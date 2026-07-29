@@ -27,9 +27,26 @@ foreach ($dirs as $dir) {
     }
 }
 
-// Force debugging and stderr logging on Vercel
-$_ENV['APP_DEBUG'] = 'true';
-$_ENV['LOG_CHANNEL'] = 'stderr';
+// Inject crucial environment variables manually to ensure foolproof Vercel execution
+$envVars = [
+    'APP_ENV' => 'production',
+    'APP_DEBUG' => 'true',
+    'APP_KEY' => 'base64:loeSxfmziYhfKMrfV1zrg5jPQ9ird6mn+pMakeEJuAw=',
+    'LOG_CHANNEL' => 'stderr',
+    'DB_CONNECTION' => 'mysql',
+    'DB_HOST' => 'gateway01.ap-southeast-1.prod.alicloud.tidbcloud.com',
+    'DB_PORT' => '4000',
+    'DB_DATABASE' => 'buku_tamu',
+    'DB_USERNAME' => '7i7y5jnB4C5ez9W.root',
+    'DB_PASSWORD' => 'ZvaAF9CCIiE6cpQr',
+    'MYSQL_ATTR_SSL_CA' => __DIR__.'/../cacert.pem',
+];
+
+foreach ($envVars as $key => $value) {
+    putenv("$key=$value");
+    $_SERVER[$key] = $value;
+    $_ENV[$key] = $value;
+}
 
 // Maintenance mode check
 if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php')) {
