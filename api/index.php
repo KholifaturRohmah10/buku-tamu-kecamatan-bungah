@@ -62,5 +62,10 @@ $app = require_once __DIR__.'/../bootstrap/app.php';
 // Tell Laravel to use the writable /tmp/storage directory
 $app->useStoragePath($storagePath);
 
-// Handle the request
-$app->handleRequest(Request::capture());
+// Handle the request with a global try-catch to intercept Exception Handler crashes
+try {
+    $app->handleRequest(Request::capture());
+} catch (\Throwable $e) {
+    echo "<h1>CRITICAL ERROR CAUGHT BY VERCEL WRAPPER</h1>";
+    echo "<pre>" . htmlspecialchars((string) $e) . "</pre>";
+}
