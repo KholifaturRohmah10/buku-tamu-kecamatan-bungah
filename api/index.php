@@ -112,15 +112,6 @@ $app = require_once __DIR__.'/../bootstrap/app.php';
 // Tell Laravel to use the writable /tmp/storage directory
 $app->useStoragePath($storagePath);
 
-// Force known-working SSL configuration for TiDB Serverless after app boots
-$app->booted(function() use ($caPath) {
-    $options = [1014 => false];
-    if (file_exists($caPath)) {
-        $options[1009] = $caPath;
-    }
-    config(['database.connections.mysql.options' => $options]);
-});
-
 // Handle the request with a global try-catch to intercept Exception Handler crashes
 try {
     $app->handleRequest(Request::capture());

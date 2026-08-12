@@ -60,7 +60,7 @@ return [
             'strict' => true,
             'engine' => null,
             'options' => [
-                1009 => env('MYSQL_ATTR_SSL_CA') ? base_path(env('MYSQL_ATTR_SSL_CA')) : __DIR__.'/../isrgrootx1.pem',
+                1009 => env('MYSQL_ATTR_SSL_CA') ? (Str::startsWith(env('MYSQL_ATTR_SSL_CA'), ['/', '\\']) ? env('MYSQL_ATTR_SSL_CA') : base_path(env('MYSQL_ATTR_SSL_CA'))) : __DIR__.'/../isrgrootx1.pem',
                 1014 => false,
             ],
         ],
