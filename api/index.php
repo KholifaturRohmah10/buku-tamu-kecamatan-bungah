@@ -33,6 +33,15 @@ if (!is_dir($bootstrapCachePath)) {
     mkdir($bootstrapCachePath, 0755, true);
 }
 
+// Determine correct SSL CA path
+$caPath = __DIR__.'/../cacert.pem';
+if (!file_exists($caPath)) {
+    $caPath = '/etc/pki/tls/certs/ca-bundle.crt';
+}
+if (!file_exists($caPath)) {
+    $caPath = __DIR__.'/../isrgrootx1.pem';
+}
+
 // Inject crucial environment variables manually to ensure foolproof Vercel execution
 $envVars = [
     'APP_ENV' => 'production',
@@ -45,7 +54,7 @@ $envVars = [
     'DB_DATABASE' => 'buku_tamu',
     'DB_USERNAME' => '7i7y5jnB4C5ez9W.root',
     'DB_PASSWORD' => 'ZvaAF9CCIiE6cpQr',
-    'MYSQL_ATTR_SSL_CA' => __DIR__.'/../cacert.pem',
+    'MYSQL_ATTR_SSL_CA' => file_exists($caPath) ? $caPath : '',
     'APP_SERVICES_CACHE' => '/tmp/storage/bootstrap/cache/services.php',
     'APP_PACKAGES_CACHE' => '/tmp/storage/bootstrap/cache/packages.php',
     'APP_CONFIG_CACHE' => '/tmp/storage/bootstrap/cache/config.php',
@@ -74,13 +83,12 @@ $app = require_once __DIR__.'/../bootstrap/app.php';
 $app->useStoragePath($storagePath);
 
 // Force known-working SSL configuration for TiDB Serverless after app boots
-$app->booted(function() {
-    config([
-        'database.connections.mysql.options' => [
-            1009 => __DIR__.'/../cacert.pem', // PDO::MYSQL_ATTR_SSL_CA
-            1014 => false, // PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT
-        ]
-    ]);
+$app->booted(function() use ($caPath) {
+    $options = [1014 => false];
+    if (file_exists($caPath)) {
+        $options[1009] = $caPath;
+    }
+    config(['database.connections.mysql.options' => $options]);
 });
 
 // Handle the request with a global try-catch to intercept Exception Handler crashes
