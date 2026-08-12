@@ -33,14 +33,8 @@ if (!is_dir($bootstrapCachePath)) {
     mkdir($bootstrapCachePath, 0755, true);
 }
 
-// Determine correct SSL CA path
-$caPath = __DIR__.'/../cacert.pem';
-if (!file_exists($caPath)) {
-    $caPath = '/etc/pki/tls/certs/ca-bundle.crt';
-}
-if (!file_exists($caPath)) {
-    $caPath = __DIR__.'/../isrgrootx1.pem';
-}
+// STRICTLY use isrgrootx1.pem for TiDB Cloud Serverless on Vercel to avoid Let's Encrypt cross-signing bugs on AWS Lambda
+$caPath = __DIR__.'/../isrgrootx1.pem';
 
 // Inject crucial environment variables manually to ensure foolproof Vercel execution
 $envVars = [
