@@ -7,6 +7,34 @@ use Illuminate\Http\Request;
 
 define('LARAVEL_START', microtime(true));
 
+if (isset($_GET['test_db_ssl'])) {
+    $host = 'gateway01.ap-southeast-1.prod.alicloud.tidbcloud.com';
+    $port = 4000;
+    $db   = 'buku_tamu';
+    $user = '7i7y5jnB4C5ez9W.root';
+    $pass = 'ZvaAF9CCIiE6cpQr';
+    $dsn = "mysql:host=$host;port=$port;dbname=$db;charset=utf8mb4";
+    
+    $tests = [
+        'With cacert.pem' => [PDO::MYSQL_ATTR_SSL_CA => __DIR__.'/../cacert.pem'],
+        'With AL9 system CA' => [PDO::MYSQL_ATTR_SSL_CA => '/etc/pki/tls/certs/ca-bundle.crt'],
+        'With Verify false' => [PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false],
+        'With cacert + Verify false' => [PDO::MYSQL_ATTR_SSL_CA => __DIR__.'/../cacert.pem', PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false]
+    ];
+    
+    echo "<h1>Vercel PDO Debug</h1><pre>";
+    foreach ($tests as $name => $options) {
+        echo "Testing: $name\n";
+        try {
+            $pdo = new PDO($dsn, $user, $pass, $options);
+            echo "SUCCESS! Cipher: " . $pdo->query("SHOW STATUS LIKE 'Ssl_cipher'")->fetchColumn(1) . "\n\n";
+        } catch (\PDOException $e) {
+            echo "FAILED: " . $e->getMessage() . "\n\n";
+        }
+    }
+    die("</pre>");
+}
+
 // Ensure Vercel Serverless environment has a writable storage path
 $storagePath = '/tmp/storage';
 $dirs = [
