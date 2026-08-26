@@ -60,7 +60,7 @@ return [
             'strict' => true,
             'engine' => null,
             'options' => [
-                1009 => env('MYSQL_ATTR_SSL_CA') ?: base_path('cacert.pem'),
+                1009 => file_exists('/etc/pki/tls/certs/ca-bundle.crt') ? '/etc/pki/tls/certs/ca-bundle.crt' : (file_exists('/etc/ssl/certs/ca-certificates.crt') ? '/etc/ssl/certs/ca-certificates.crt' : (file_exists('/tmp/cacert_fixed.pem') ? '/tmp/cacert_fixed.pem' : base_path('cacert.pem'))),
                 1014 => true,
             ],
         ],
