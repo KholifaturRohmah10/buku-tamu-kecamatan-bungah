@@ -33,8 +33,12 @@ if (!is_dir($bootstrapCachePath)) {
     mkdir($bootstrapCachePath, 0755, true);
 }
 
-// Use the bundled cacert.pem file instead of writing to /tmp
-$caPath = __DIR__.'/../cacert.pem';
+// Use the bundled cacert.pem file but strictly enforce LF line endings for OpenSSL on Linux
+$caPath = '/tmp/cacert_fixed.pem';
+if (!file_exists($caPath)) {
+    $certContent = file_get_contents(__DIR__.'/../cacert.pem');
+    file_put_contents($caPath, str_replace("\r\n", "\n", $certContent));
+}
 
 // Inject crucial environment variables manually to ensure foolproof Vercel execution
 $envVars = [
